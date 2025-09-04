@@ -1,0 +1,86 @@
+package com.journalapp.entity;
+
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.ManyToAny;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.journalapp.Enum.Sentiments;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+
+@Entity
+
+public class JournalEntry {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+private Long id;
+private String title;
+private String content;
+private LocalDateTime date;
+@Enumerated(EnumType.STRING)
+private Sentiments sentiments;
+@ManyToOne
+@JsonIgnore
+@JoinColumn(name="user_id")
+private User user;
+public Sentiments getSentiments() {
+	return sentiments;
+}
+public void setSentiments(Sentiments sentiments) {
+	this.sentiments = sentiments;
+}
+public Long getId() {
+	return id;
+}
+public void setId(Long id) {
+	this.id = id;
+}
+public String getTitle() {
+	return title;
+}
+public void setTitle(String title) {
+	this.title = title;
+}
+public String getContent() {
+	return content;
+}
+public void setContent(String content) {
+	this.content = content;
+}
+public LocalDateTime getDate() {
+	return date;
+}
+public void setDate(LocalDateTime date) {
+	this.date = date;
+}
+public User getUser() {
+	return user;
+}
+public void setUser(User user) {
+	this.user = user;
+}
+public JournalEntry(Long id, String title, String content, LocalDateTime date, User user,Sentiments sentiments) {
+	super();
+	this.id = id;
+	this.title = title;
+	this.content = content;
+	this.date = date;
+	this.user = user;
+	this.sentiments = sentiments;
+}
+public JournalEntry() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+
+
+}
