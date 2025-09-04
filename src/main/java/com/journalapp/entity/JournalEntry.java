@@ -26,6 +26,20 @@ private Long id;
 private String title;
 private String content;
 private LocalDateTime date;
+private String img;
+private String cloudinaryPublicId;
+public String getImg() {
+	return img;
+}
+public void setImg(String img) {
+	this.img = img;
+}
+public String getCloudinaryPublicId() {
+	return cloudinaryPublicId;
+}
+public void setCloudinaryPublicId(String cloudinaryPublicId) {
+	this.cloudinaryPublicId = cloudinaryPublicId;
+}
 @Enumerated(EnumType.STRING)
 private Sentiments sentiments;
 @ManyToOne
@@ -68,7 +82,7 @@ public User getUser() {
 public void setUser(User user) {
 	this.user = user;
 }
-public JournalEntry(Long id, String title, String content, LocalDateTime date, User user,Sentiments sentiments) {
+public JournalEntry(Long id, String title, String content, LocalDateTime date, User user,Sentiments sentiments,String img,String cloudinaryPubliId) {
 	super();
 	this.id = id;
 	this.title = title;
@@ -76,6 +90,8 @@ public JournalEntry(Long id, String title, String content, LocalDateTime date, U
 	this.date = date;
 	this.user = user;
 	this.sentiments = sentiments;
+	this.img = img;
+	this.cloudinaryPublicId=cloudinaryPublicId;
 }
 public JournalEntry() {
 	super();

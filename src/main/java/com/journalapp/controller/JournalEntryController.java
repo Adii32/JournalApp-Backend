@@ -1,5 +1,6 @@
 package com.journalapp.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,12 +15,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.journalapp.entity.JournalEntry;
 import com.journalapp.entity.User;
@@ -28,6 +32,7 @@ import com.journalapp.service.JournalService;
 import com.journalapp.service.UserService;
 
 import aj.org.objectweb.asm.commons.TryCatchBlockSorter;
+import jakarta.mail.Multipart;
 import jakarta.transaction.Transactional;
 
 @RestController
@@ -56,7 +61,7 @@ return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 }
 @PostMapping
 //@Transactional
-public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myentry) {
+public ResponseEntity<JournalEntry> createEntry(@ModelAttribute JournalEntry myentry,@RequestParam("imageFile")MultipartFile imageFile) throws IOException {
 	try {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
@@ -64,7 +69,7 @@ public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myentr
 	
 		 myentry.setDate(LocalDateTime.now());
 		 myentry.setUser(user);
-		 JournalEntry entry = journalService.createJournal(myentry);
+		 JournalEntry entry = journalService.createJournal(myentry, imageFile);
 		 user.getEntry().add(entry);	
 	
 		 userService.saveEntry(user);

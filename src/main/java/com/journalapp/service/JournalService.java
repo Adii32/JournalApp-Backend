@@ -1,5 +1,6 @@
 package com.journalapp.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.journalapp.Info.ImgInfo;
 import com.journalapp.entity.JournalEntry;
 import com.journalapp.entity.User;
 import com.journalapp.exception.ResourceNotFound;
@@ -24,12 +28,16 @@ public class JournalService {
 	private JournalRepo journalRepo;
 	@Autowired
 	private UserService userService;
-
+@Autowired
+private ImageUploadService imageService;
 
 	public JournalService(JournalRepo journalRepo) {
 		this.journalRepo = journalRepo;
 	}
-public JournalEntry createJournal(JournalEntry entry) {
+public JournalEntry createJournal(JournalEntry entry,MultipartFile imageFile) throws IOException {
+	ImgInfo imgInfo = imageService.upload(imageFile);
+ entry.setImg(imgInfo.secure_url());
+ entry.setCloudinaryPublicId(imgInfo.public_id());
 	return journalRepo.save(entry);
 }
 
