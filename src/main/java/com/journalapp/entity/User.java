@@ -24,7 +24,8 @@ private Long user_id;
 	private String userName;
 	private String email;
 	private boolean sentimentAnalysis;
-	
+	private String profilePic;
+	private String cloudinaryPublicId;
 
 public String getEmail() {
 		return email;
@@ -89,7 +90,7 @@ List<JournalEntry> entry = new ArrayList<>();
 	}
 
 	public User(Long user_id, String userName, String email, boolean sentimentAnalysis, String roles, String password,
-			List<JournalEntry> entry) {
+			List<JournalEntry> entry,String profilePic,String cloudinaryPublicId) {
 		super();
 		this.user_id = user_id;
 		this.userName = userName;
@@ -98,7 +99,25 @@ List<JournalEntry> entry = new ArrayList<>();
 		Roles = roles;
 		this.password = password;
 		this.entry = entry;
+		this.profilePic = profilePic;
+		this.cloudinaryPublicId = cloudinaryPublicId;
 	}
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    public String getCloudinaryPublicId() {
+        return cloudinaryPublicId;
+    }
+
+    public void setCloudinaryPublicId(String cloudinaryPublicId) {
+        this.cloudinaryPublicId = cloudinaryPublicId;
+    }
 
 
 

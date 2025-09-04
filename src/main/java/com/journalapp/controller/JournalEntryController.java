@@ -39,11 +39,12 @@ import jakarta.transaction.Transactional;
 @RequestMapping("/journal")
 public class JournalEntryController {
 	private JournalService journalService;
+
 	
 	public JournalEntryController(JournalService journalService) {
 		this.journalService = journalService;
 	}
-	
+	@Autowired
 	private JournalRepo journalRepo;
 @Autowired
 private UserService userService;
@@ -133,5 +134,16 @@ if(!collect.isEmpty()) {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	
 
+}
+@GetMapping("/search")
+public ResponseEntity<List<JournalEntry>> searchByKeyword(@RequestParam("keyword") String keyword) {
+	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	String username = authentication.getName();
+List<JournalEntry> list = journalRepo.searchByKeyword(username,keyword);
+if(list != null) {
+	System.out.println(list);
+	return new ResponseEntity<>(list,HttpStatus.OK);
+}
+return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
 }
 }

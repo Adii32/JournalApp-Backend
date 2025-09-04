@@ -1,13 +1,17 @@
 package com.journalapp.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.journalapp.Info.ImgInfo;
 import com.journalapp.entity.User;
 import com.journalapp.exception.ResourceNotFound;
 import com.journalapp.repo.UserRepo;
@@ -19,6 +23,8 @@ import com.journalapp.repo.UserRepo;
 public class UserService {
 	private UserRepo userRepo;
 	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	@Autowired
+	private ImageUploadService imageService;
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	public UserService(UserRepo userRepo) {
 		this.userRepo = userRepo;
@@ -26,10 +32,14 @@ public class UserService {
 	public void saveEntry(User user) {
 		userRepo.save(user);
 	}
-public User createUser(User user) {
+public User createUser(User user,MultipartFile imageFile) throws IOException {
+	ImgInfo imgInfo = imageService.upload(imageFile);
+	user.setCloudinaryPublicId(imgInfo.public_id());
+	user.setProfilePic(imgInfo.secure_url());
+
 user.setPassword(passwordEncoder.encode(user.getPassword()));
 user.setRoles("user");
-logger.error("user is alredy with name {}",user.getUserName());
+
 	return userRepo.save(user);
 }
 public List<User> getAll() {
