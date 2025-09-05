@@ -29,6 +29,7 @@ import com.journalapp.entity.JournalEntry;
 import com.journalapp.entity.User;
 import com.journalapp.repo.JournalRepo;
 import com.journalapp.repo.JournalRepoImpl;
+import com.journalapp.service.EmailService;
 import com.journalapp.service.JournalService;
 import com.journalapp.service.UserService;
 
@@ -39,8 +40,9 @@ import jakarta.transaction.Transactional;
 @RestController
 @RequestMapping("/journal")
 public class JournalEntryController {
-	@Autowired
+
 	private JournalService journalService;
+
 @Autowired
 private JournalRepoImpl journalRepoImpl;
 	
@@ -49,9 +51,13 @@ private JournalRepoImpl journalRepoImpl;
 	}
 	@Autowired
 	private JournalRepo journalRepo;
+
 @Autowired
 private UserService userService;
-private Map<Long,JournalEntry> entry = new HashMap<>();
+
+
+@Autowired
+private EmailService emailService;
 @GetMapping
 public ResponseEntity<?> getAllJournalEntryOfUser(){
 	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -77,6 +83,7 @@ public ResponseEntity<JournalEntry> createEntry(@ModelAttribute JournalEntry mye
 		 user.getEntry().add(entry);	
 	
 		 userService.saveEntry(user);
+		 emailService.sendEmail(user.getEmail(),"new journal added","title of journal entry is "+myentry.getTitle());
 		 return new ResponseEntity<>(myentry,HttpStatus.CREATED);
 	} catch (Exception e) {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -104,8 +111,17 @@ public ResponseEntity<?> deleteEntry(@PathVariable Long id) {
 
 	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	String username = authentication.getName();
+	User user = userService.findByUserName(username);
+	JournalEntry deleteEntry = journalRepo.findById(id).orElse(null);
+	String title = deleteEntry != null ? deleteEntry.getTitle() : "unknown title";
 	boolean removed = journalService.deleteEntry(id, username);
 	if(removed) {
+		emailService.sendEmail(
+    user.getEmail(),
+    "Journal entry deleted",
+    "Title of journal entry is " +title
+);
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -127,6 +143,11 @@ if(!collect.isEmpty()) {
 		old.setContent(newEntry.getContent() != null && !newEntry.getContent().equals("") ? newEntry.getContent() : old.getContent());
 	old.setDate(LocalDateTime.now());
 		journalService.saveNewEntry(old);
+			emailService.sendEmail(
+    user.getEmail(),
+    "Journal entry updated",
+    "the title of updated journal entry is "+newEntry.getTitle() 
+);
 	
 	return new ResponseEntity<>(newEntry,HttpStatus.OK);
 	}

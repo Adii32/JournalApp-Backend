@@ -33,6 +33,7 @@ private AppCache appCache;
 @Scheduled(cron = "0 21 14 * * WED")
 @Transactional
 public void fetchUsersAndSendSaMail() {
+    
     List<User> users = userRepoImpl.getUsersForSA();
     for (User user : users) {
         List<JournalEntry> journalEntries = user.getEntry();
@@ -54,6 +55,14 @@ public void fetchUsersAndSendSaMail() {
             emailService.sendEmail(user.getEmail(), "Sentiment for last 7 days ", mostFrequentSentiment.toString());
         }
     }
+}
+
+@Scheduled(cron = "0 30 10 * * *")
+public void everydaynotification() {
+List<User> users = userRepoImpl.getUsersForSA();
+for(User user : users){
+    emailService.sendEmail(user.getEmail(),"Daily Notification from journal app","Hello "+user.getUserName()+"write your journal today");
+}
 }
 
 @Scheduled(cron = "0 0/10 * ? * *")

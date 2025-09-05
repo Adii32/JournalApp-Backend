@@ -19,8 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.journalapp.api.response.WeatherResponse;
 import com.journalapp.entity.User;
+import com.journalapp.service.EmailService;
 import com.journalapp.service.UserService;
-import com.journalapp.service.WeatherService;
+
 import com.journalapp.utils.JwtUtil;
 
 @RestController
@@ -37,9 +38,11 @@ UserDetailsService userDetailsService;
 private UserService userService;
 @Autowired
 private AuthenticationManager authenticationManger;
-
+@Autowired
+private EmailService emailService;
 	@PostMapping("/signup")
 	public User createEntry(@ModelAttribute User user,@RequestParam("imageFile")MultipartFile imageFile) throws IOException {
+emailService.sendEmail(user.getEmail(),"welcome to Journal app","you have successfully registered");
 		return this.userService.createUser(user,imageFile);
 	}
 		@PostMapping("/login")
@@ -50,6 +53,7 @@ private AuthenticationManager authenticationManger;
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword()));
 			UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserName());
 			String jwt = jwtUtil.generateToken(userDetails.getUsername());
+			emailService.sendEmail(user.getEmail(),"welcome to Journal app","you have successfully logged in");
 			return new ResponseEntity<>(jwt,HttpStatus.OK);
 		} catch (Exception e) {
 	   return new ResponseEntity<>("Incorrect username or password", HttpStatus.BAD_REQUEST);

@@ -17,6 +17,7 @@ import jakarta.persistence.criteria.Root;
 public class JournalRepoImpl {
 @Autowired
 private EntityManager entityManager;
+
     public List<JournalEntry> findFavorites(String username) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<JournalEntry> cq = cb.createQuery(JournalEntry.class);

@@ -22,17 +22,17 @@ import com.journalapp.api.response.WeatherResponse;
 import com.journalapp.entity.JournalEntry;
 import com.journalapp.entity.User;
 import com.journalapp.repo.UserRepo;
+import com.journalapp.service.EmailService;
 import com.journalapp.service.JournalService;
 import com.journalapp.service.UserService;
-import com.journalapp.service.WeatherService;
+
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
+@Autowired
+private EmailService emailService;
 	private UserService userService;
-	@Autowired
-	private WeatherService weatherService;
-
 	public UserController(UserService userService) {
 		this.userService = userService;
 	}
@@ -52,25 +52,20 @@ public User getById(@PathVariable Long id) {
 @DeleteMapping()
 public boolean deleteUser() {
 	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	
+	String username = authentication.getName();
+	User user = userService.findByUserName(username);
+	emailService.sendEmail(user.getEmail(),"notification from journal app","your account has been deleted");
 	userRepo.deleteByUserName(authentication.getName());
 return true;
 }
 @PutMapping
 public User updateUser(@RequestBody User user) {
 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-String username = authentication.getName();
+
+	String username = authentication.getName();
+User old = userService.findByUserName(username);
+	emailService.sendEmail(user.getEmail(),"notification from journal app","your account details updated successfully");
 return userService.updateUser(username, user);
 }
-@GetMapping("/get_greeting")
-public ResponseEntity<?> greeting() {
-	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	WeatherResponse response = weatherService.getWeather("mumbai");
-int weather =0;
-	if(response != null) {
-	 weather = response.getCurrent().getFeelslike();
-	}
-	
-return new ResponseEntity<>("hii weather is ..."+weather,HttpStatus.OK);
-}
+
 }

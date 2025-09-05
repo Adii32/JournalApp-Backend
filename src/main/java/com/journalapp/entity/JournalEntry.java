@@ -19,7 +19,6 @@ import jakarta.persistence.ManyToOne;
 
 
 @Entity
-
 public class JournalEntry {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
