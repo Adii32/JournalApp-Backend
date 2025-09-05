@@ -15,7 +15,10 @@ public void deleteById(Long id);
 @Query("SELECT j FROM JournalEntry j " +
 	       "WHERE j.user.userName = :username " +
 	       "AND (LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-	       "OR LOWER(j.content) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+	       "OR LOWER(j.content) LIKE LOWER(CONCAT('%', :keyword, '%'))"
+	       +"OR LOWER(j.category) LIKE LOWER(CONCAT('%', :keyword, '%')))")
 	List<JournalEntry> searchByKeyword(@Param("username") String username,
 	                                   @Param("keyword") String keyword);
+
+
 }

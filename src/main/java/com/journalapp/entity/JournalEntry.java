@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ManyToAny;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.journalapp.Enum.Category;
 import com.journalapp.Enum.Sentiments;
 
 import jakarta.persistence.Entity;
@@ -28,6 +29,9 @@ private String content;
 private LocalDateTime date;
 private String img;
 private String cloudinaryPublicId;
+private boolean favorite;
+@Enumerated(EnumType.STRING)
+private Category category;
 public String getImg() {
 	return img;
 }
@@ -42,6 +46,18 @@ public void setCloudinaryPublicId(String cloudinaryPublicId) {
 }
 @Enumerated(EnumType.STRING)
 private Sentiments sentiments;
+public boolean isFavorite() {
+	return favorite;
+}
+public void setFavorite(boolean favorite) {
+	this.favorite = favorite;
+}
+public Category getCategory() {
+	return category;
+}
+public void setCategory(Category category) {
+	this.category = category;
+}
 @ManyToOne
 @JsonIgnore
 @JoinColumn(name="user_id")
@@ -82,16 +98,20 @@ public User getUser() {
 public void setUser(User user) {
 	this.user = user;
 }
-public JournalEntry(Long id, String title, String content, LocalDateTime date, User user,Sentiments sentiments,String img,String cloudinaryPubliId) {
+
+public JournalEntry(Long id, String title, String content, LocalDateTime date, String img, String cloudinaryPublicId,
+		boolean favorite, Category category, Sentiments sentiments, User user) {
 	super();
 	this.id = id;
 	this.title = title;
 	this.content = content;
 	this.date = date;
-	this.user = user;
-	this.sentiments = sentiments;
 	this.img = img;
-	this.cloudinaryPublicId=cloudinaryPublicId;
+	this.cloudinaryPublicId = cloudinaryPublicId;
+	this.favorite = favorite;
+	this.category = category;
+	this.sentiments = sentiments;
+	this.user = user;
 }
 public JournalEntry() {
 	super();

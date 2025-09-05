@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.journalapp.entity.JournalEntry;
 import com.journalapp.entity.User;
 import com.journalapp.repo.JournalRepo;
+import com.journalapp.repo.JournalRepoImpl;
 import com.journalapp.service.JournalService;
 import com.journalapp.service.UserService;
 
@@ -38,8 +39,10 @@ import jakarta.transaction.Transactional;
 @RestController
 @RequestMapping("/journal")
 public class JournalEntryController {
+	@Autowired
 	private JournalService journalService;
-
+@Autowired
+private JournalRepoImpl journalRepoImpl;
 	
 	public JournalEntryController(JournalService journalService) {
 		this.journalService = journalService;
@@ -128,7 +131,7 @@ if(!collect.isEmpty()) {
 	return new ResponseEntity<>(newEntry,HttpStatus.OK);
 	}
 }
-		
+
 		
 
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -144,6 +147,18 @@ if(list != null) {
 	System.out.println(list);
 	return new ResponseEntity<>(list,HttpStatus.OK);
 }
-return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
+@GetMapping("/favorites")
+public ResponseEntity<List<JournalEntry>> getAllFavoriteJournal(){
+	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	String username = authentication.getName();
+	
+List<JournalEntry> journals = journalRepoImpl.findFavorites(username);
+if(journals != null) {
+	return new ResponseEntity<>(journals,HttpStatus.OK);
+}
+return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+}
+
 }
