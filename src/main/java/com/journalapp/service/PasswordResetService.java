@@ -20,7 +20,7 @@ public class PasswordResetService {
 	//code to reset password
 	public void generateResetToken(String email) {
 	User user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("user not found"));
-	String token = UUID.randomUUID().toString();
+	String token = UUID.randomUUID().toString().substring(0,6);
 	user.setResetToken(token);
 	user.setTokenExpiry(LocalDateTime.now().plusMinutes(5));
 
