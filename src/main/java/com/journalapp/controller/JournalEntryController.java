@@ -1,6 +1,7 @@
 package com.journalapp.controller;
 
 import java.io.IOException;
+
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -8,8 +9,10 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -181,5 +184,15 @@ if(journals != null) {
 }
 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
+@GetMapping("/export/txt")
+public ResponseEntity<byte[]> exportToTxtFile(){
+	List<JournalEntry> list = journalRepo.findAll();
+	byte[] content = journalService.generateTxtFile(list); 
+	journalService.saveTxtFile(list, content);
+	 return ResponseEntity.ok()
+	            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=all-journal-entries.txt")
+	            .contentType(MediaType.TEXT_PLAIN)
+	            .body(content);
 
+}
 }

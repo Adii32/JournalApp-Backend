@@ -45,6 +45,7 @@ public void setCloudinaryPublicId(String cloudinaryPublicId) {
 }
 @Enumerated(EnumType.STRING)
 private Sentiments sentiments;
+
 public boolean isFavorite() {
 	return favorite;
 }

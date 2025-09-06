@@ -1,8 +1,12 @@
 package com.journalapp.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+
+import javax.swing.text.Document;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +25,10 @@ import com.journalapp.repo.JournalRepo;
 
 import jakarta.transaction.Transactional;
 
-
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 @Service
 
 public class JournalService {
@@ -82,4 +89,21 @@ return journal;
 public JournalEntry saveNewEntry(JournalEntry journalEntry) {
 	return journalRepo.save(journalEntry);
 }
+public byte[] generateTxtFile(List<JournalEntry> entries) {
+	
+StringBuilder sb = new StringBuilder();
+for(JournalEntry entry : entries) {
+	
+	sb.append("title").append(" :"+entry.getTitle()).append("\n");
+	sb.append("content").append(" : "+entry.getContent()).append("\n");
+	sb.append("date").append(entry.getDate()).append("\n");
+	sb.append("favorite").append(" : "+entry.isFavorite()).append("\n");
+	sb.append("category").append(" : "+entry.getCategory()).append("\n");
+	sb.append("sentiment").append(" : "+entry.getSentiments()).append("\n");
+}
+	
+return sb.toString().getBytes(StandardCharsets.UTF_8);	
+	
+}
+
 }
