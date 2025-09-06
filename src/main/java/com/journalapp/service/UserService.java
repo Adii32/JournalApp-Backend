@@ -1,7 +1,11 @@
 package com.journalapp.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
+
+import javax.management.RuntimeErrorException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +25,8 @@ import com.journalapp.repo.UserRepo;
 @Service
 
 public class UserService {
+	@Autowired
+	private EmailService emailService;
 	private UserRepo userRepo;
 	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	@Autowired
@@ -64,4 +70,10 @@ user.setPassword(passwordEncoder.encode(user1.getPassword()));
 return user;
 }
 
+	
 }
+
+
+
+
+

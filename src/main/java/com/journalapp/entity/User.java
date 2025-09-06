@@ -1,7 +1,10 @@
 package com.journalapp.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.cglib.core.Local;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,6 +29,24 @@ private Long user_id;
 	private boolean sentimentAnalysis;
 	private String profilePic;
 	private String cloudinaryPublicId;
+	private LocalDateTime tokenExpiry;
+	private String resetToken;
+
+public LocalDateTime getTokenExpiry() {
+		return tokenExpiry;
+	}
+
+	public void setTokenExpiry(LocalDateTime tokenExpiry) {
+		this.tokenExpiry = tokenExpiry;
+	}
+
+	public String getResetToken() {
+		return resetToken;
+	}
+
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
+	}
 
 public String getEmail() {
 		return email;
@@ -90,7 +111,7 @@ List<JournalEntry> entry = new ArrayList<>();
 	}
 
 	public User(Long user_id, String userName, String email, boolean sentimentAnalysis, String roles, String password,
-			List<JournalEntry> entry,String profilePic,String cloudinaryPublicId) {
+			List<JournalEntry> entry,String profilePic,String cloudinaryPublicId,LocalDateTime tokenExpiry,String resetToken) {
 		super();
 		this.user_id = user_id;
 		this.userName = userName;
@@ -101,6 +122,8 @@ List<JournalEntry> entry = new ArrayList<>();
 		this.entry = entry;
 		this.profilePic = profilePic;
 		this.cloudinaryPublicId = cloudinaryPublicId;
+		this.resetToken = resetToken;
+		this.tokenExpiry = tokenExpiry;
 	}
 
     public String getProfilePic() {
