@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -42,6 +43,7 @@ import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/journal")
+@CrossOrigin(origins="http://localhost:4200")
 public class JournalEntryController {
 
 	private JournalService journalService;
@@ -61,6 +63,7 @@ private UserService userService;
 
 @Autowired
 private EmailService emailService;
+
 @GetMapping
 public ResponseEntity<?> getAllJournalEntryOfUser(){
 	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -184,15 +187,6 @@ if(journals != null) {
 }
 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
-@GetMapping("/export/txt")
-public ResponseEntity<byte[]> exportToTxtFile(){
-	List<JournalEntry> list = journalRepo.findAll();
-	byte[] content = journalService.generateTxtFile(list); 
-	journalService.saveTxtFile(list, content);
-	 return ResponseEntity.ok()
-	            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=all-journal-entries.txt")
-	            .contentType(MediaType.TEXT_PLAIN)
-	            .body(content);
 
 }
-}
+

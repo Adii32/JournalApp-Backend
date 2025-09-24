@@ -1,6 +1,7 @@
 package com.journalapp.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.ManyToAny;
 
@@ -16,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
@@ -29,6 +31,12 @@ private LocalDateTime date;
 private String img;
 private String cloudinaryPublicId;
 private boolean favorite;
+@OneToMany(mappedBy="journalEntry")
+@JsonIgnore
+private List<LikeFeature> likes;
+@JsonIgnore
+@OneToMany(mappedBy="journalEntry")
+private List<CommentFeature> comments;
 @Enumerated(EnumType.STRING)
 private Category category;
 public String getImg() {
@@ -99,8 +107,22 @@ public void setUser(User user) {
 	this.user = user;
 }
 
+
+public List<LikeFeature> getLikes() {
+	return likes;
+}
+public void setLikes(List<LikeFeature> likes) {
+	this.likes = likes;
+}
+public List<CommentFeature> getComments() {
+	return comments;
+}
+public void setComments(List<CommentFeature> comments) {
+	this.comments = comments;
+}
 public JournalEntry(Long id, String title, String content, LocalDateTime date, String img, String cloudinaryPublicId,
-		boolean favorite, Category category, Sentiments sentiments, User user) {
+		boolean favorite, List<LikeFeature> likes, List<CommentFeature> comments, Category category,
+		Sentiments sentiments, User user) {
 	super();
 	this.id = id;
 	this.title = title;
@@ -109,6 +131,8 @@ public JournalEntry(Long id, String title, String content, LocalDateTime date, S
 	this.img = img;
 	this.cloudinaryPublicId = cloudinaryPublicId;
 	this.favorite = favorite;
+	this.likes = likes;
+	this.comments = comments;
 	this.category = category;
 	this.sentiments = sentiments;
 	this.user = user;

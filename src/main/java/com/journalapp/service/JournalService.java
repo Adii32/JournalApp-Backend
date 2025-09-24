@@ -89,21 +89,5 @@ return journal;
 public JournalEntry saveNewEntry(JournalEntry journalEntry) {
 	return journalRepo.save(journalEntry);
 }
-public byte[] generateTxtFile(List<JournalEntry> entries) {
-	
-StringBuilder sb = new StringBuilder();
-for(JournalEntry entry : entries) {
-	
-	sb.append("title").append(" :"+entry.getTitle()).append("\n");
-	sb.append("content").append(" : "+entry.getContent()).append("\n");
-	sb.append("date").append(entry.getDate()).append("\n");
-	sb.append("favorite").append(" : "+entry.isFavorite()).append("\n");
-	sb.append("category").append(" : "+entry.getCategory()).append("\n");
-	sb.append("sentiment").append(" : "+entry.getSentiments()).append("\n");
-}
-	
-return sb.toString().getBytes(StandardCharsets.UTF_8);	
-	
-}
 
 }
