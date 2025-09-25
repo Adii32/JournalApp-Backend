@@ -55,6 +55,7 @@ return ResponseEntity.ok(userService.getAll());
 public User getById(@PathVariable Long id) {
 	return userService.getById(id);
 }
+
 @DeleteMapping()
 public boolean deleteUser() {
 	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -80,6 +81,7 @@ User user = userService.findByUserName(name);
 	return ResponseEntity.ok(user);
 	
 }
+
 @GetMapping("/posts/{ownerId}") 
 public ResponseEntity<List<JournalEntry>> getAllJournals(@PathVariable Long ownerId){
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -92,6 +94,12 @@ public ResponseEntity<List<JournalEntry>> getAllJournals(@PathVariable Long owne
 	return ResponseEntity.ok(journals);
 	
 	
+}
+@GetMapping("/getAllUsers")
+public ResponseEntity<List<User>> getAllUsers(){
+	
+	List<User> users = userService.getAll();
+	return ResponseEntity.ok(users);
 }
 
 

@@ -26,9 +26,9 @@ public class FriendRequestController {
 	@Autowired
 	private FriendRequestService frndRequestService;
 	@PostMapping("/send")
-	public ResponseEntity<?> sendRequest(@RequestParam Long senderId,@RequestParam Long recieverId) {
+	public ResponseEntity<?> sendRequest(@RequestParam Long senderId,@RequestParam Long receiverId) {
 		try {
-			FriendRequest request = frndRequestService.sendRequest(senderId,recieverId);
+			FriendRequest request = frndRequestService.sendRequest(senderId,receiverId);
 			
 			return ResponseEntity.ok(request);
 			
@@ -74,6 +74,7 @@ public class FriendRequestController {
 		
 		
 	}
+	
 	@GetMapping("/list")
 	public ResponseEntity<Set<User>> getAllFriends(@RequestParam Long id){
 		Set<User> users = frndRequestService.getAllFriedns(id);

@@ -2,6 +2,8 @@ package com.journalapp.entity;
 
 import org.hibernate.annotations.GeneratorType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -24,20 +26,27 @@ public class FriendRequest {
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 private long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	
+	@ManyToOne
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@JoinColumn(name="sender_id",nullable = false)
 	private User sender;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "reciever_id" , nullable = false)
-private User reciever;
+
+	@ManyToOne
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@JoinColumn(name="receiver_id",nullable = false)
+	private User receiver;
+
+	
+	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
 	private Status status = Status.PENDING;
-	public FriendRequest(long id,  User sender, User reciever, Status status) {
+	public FriendRequest(long id,  User sender, User receiver, Status status) {
 		super();
 		this.id = id;
 		this.sender = sender;
-		this.reciever = reciever;
+		this.receiver = receiver;
 		this.status = status;
 	}
 	public FriendRequest() {
@@ -57,11 +66,11 @@ private User reciever;
 	public void setSender(User sender) {
 		this.sender = sender;
 	}
-	public User getReciever() {
-		return reciever;
+	public User getReceiver() {
+		return receiver;
 	}
-	public void setReciever(User reciever) {
-		this.reciever = reciever;
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
 	}
 	public Status getStatus() {
 		return status;

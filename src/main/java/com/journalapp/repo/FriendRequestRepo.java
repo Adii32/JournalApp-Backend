@@ -10,6 +10,6 @@ import com.journalapp.entity.FriendRequest;
 import com.journalapp.entity.User;
 @Repository
 public interface FriendRequestRepo extends JpaRepository<FriendRequest,Long>{
-Optional<FriendRequest> findBySenderAndReciever(User sender,User reciever);
-List<FriendRequest> findByRecieverAndStatus(User reciever,FriendRequest.Status status);
+Optional<FriendRequest> findBySenderAndReceiver(User sender,User receiver);
+List<FriendRequest> findByReceiverAndStatus(User receiver,FriendRequest.Status status);
 }

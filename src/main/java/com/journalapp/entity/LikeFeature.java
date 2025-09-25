@@ -49,7 +49,7 @@ private User user;
 		super();
 		this.id = id;
 		this.user = user;
-		this.jouranlEntry = jouranlEntry;
+		this.journalEntry = jouranlEntry;
 		this.likedAt = likedAt;
 	}
 	public LikeFeature() {

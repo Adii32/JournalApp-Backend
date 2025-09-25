@@ -23,20 +23,20 @@ public class FriendRequestService {
 private FriendRequestRepo friendRequestRepo;
 @Autowired
 private UserRepo userRepo;
-public FriendRequest sendRequest(Long recieverId,Long senderId) {
+public FriendRequest sendRequest(Long senderId,Long receiverId) {
 	User sender = userRepo.findById(senderId).orElseThrow(()->new RuntimeException("user not found with this id"));
-	User reciever = userRepo.findById(recieverId).orElseThrow(()-> new RuntimeException("user not found with this id"));
-if(friendRequestRepo.findBySenderAndReciever(sender,reciever).isPresent()) {
+	User receiver = userRepo.findById(receiverId).orElseThrow(()-> new RuntimeException("user not found with this id"));
+if(friendRequestRepo.findBySenderAndReceiver(sender,receiver).isPresent()) {
 	throw new RuntimeException("both are already friends");
 	
 }
-if ((sender.getFriend()).stream().anyMatch(u -> u.getUserId().equals(reciever.getUserId()))) {
+if ((sender.getFriend()).stream().anyMatch(u -> u.getUserId().equals(receiver.getUserId()))) {
     throw new RuntimeException("Users are already friends");
 }
 
 FriendRequest request = new FriendRequest();
 request.setSender(sender);
-request.setReciever(reciever);
+request.setReceiver(receiver);
 request.setStatus(FriendRequest.Status.PENDING);
 return friendRequestRepo.save(request);
 }
@@ -48,11 +48,11 @@ public FriendRequest acceptFriendRequest(Long requestId) {
 	}
 	request.setStatus(FriendRequest.Status.ACCEPTED);
 	User sender = request.getSender();
-	User reciever = request.getReciever();
-	sender.getFriend().add(reciever);
-	reciever.getFriend().add(sender);
+	User receiver = request.getReceiver();
+	sender.getFriend().add(receiver);
+	receiver.getFriend().add(sender);
 	userRepo.save(sender);
-	userRepo.save(reciever);
+	userRepo.save(receiver);
 	return friendRequestRepo.save(request);
 	
 }
@@ -68,7 +68,7 @@ public FriendRequest rejectFriendRequest(Long requestId) {
 public List<FriendRequest> getAllPedingRequests(Long userId) {
 	
 	User user = userRepo.findById(userId).orElseThrow(()-> new RuntimeException("user not found with this id"));
-return friendRequestRepo.findByRecieverAndStatus(user, FriendRequest.Status.PENDING);
+return friendRequestRepo.findByReceiverAndStatus(user, FriendRequest.Status.PENDING);
 
 }
 public Set<User> getAllFriedns(Long id){
@@ -81,7 +81,7 @@ public List<JournalEntry> getJournalIfFriends(Long ownerID,Long viewerID){
 	User owner = userRepo.findById(ownerID).orElseThrow(()-> new RuntimeException("user not found"));
 	if(viewer.getFriend().contains(owner)) {
 		
-		return viewer.getEntry();
+		return owner.getEntry();
 	} 
 	
 	return Collections.emptyList();

@@ -45,10 +45,9 @@ private Long userId;
 
 @JsonIgnore
 private List<FriendRequest> sentFriendRequest;
-@OneToMany(mappedBy = "reciever" , cascade = CascadeType.ALL,orphanRemoval = true)
-
+@OneToMany(mappedBy = "receiver" , cascade = CascadeType.ALL,orphanRemoval = true)
 @JsonIgnore
-private List<FriendRequest> recievedFriendRequest;
+private List<FriendRequest> receivedFriendRequest;
 @ManyToMany(fetch = FetchType.EAGER)
 @JoinTable(
     name = "user_friend",
@@ -87,12 +86,12 @@ public void setSentFriendRequest(List<FriendRequest> sentFriendRequest) {
 	this.sentFriendRequest = sentFriendRequest;
 }
 
-public List<FriendRequest> getRecievedFriendRequest() {
-	return recievedFriendRequest;
+public List<FriendRequest> getReceivedFriendRequest() {
+	return receivedFriendRequest;
 }
 
-public void setRecievedFriendRequest(List<FriendRequest> recievedFriendRequest) {
-	this.recievedFriendRequest = recievedFriendRequest;
+public void setReceivedFriendRequest(List<FriendRequest> receivedFriendRequest) {
+	this.receivedFriendRequest = receivedFriendRequest;
 }
 
 public LocalDateTime getTokenExpiry() {
@@ -183,7 +182,7 @@ List<JournalEntry> entry = new ArrayList<>();
 
 	public User(Long userId, String userName, String email, boolean sentimentAnalysis, String profilePic,
 			String cloudinaryPublicId, LocalDateTime tokenExpiry, String resetToken,
-			List<FriendRequest> sentFriendRequest, List<FriendRequest> recievedFriendRequest, Set<User> friend,
+			List<FriendRequest> sentFriendRequest, List<FriendRequest> receivedFriendRequest, Set<User> friend,
 			List<LikeFeature> likes, List<CommentFeature> comments, String roles, String password,
 			List<JournalEntry> entry) {
 		super();
@@ -196,7 +195,7 @@ List<JournalEntry> entry = new ArrayList<>();
 		this.tokenExpiry = tokenExpiry;
 		this.resetToken = resetToken;
 		this.sentFriendRequest = sentFriendRequest;
-		this.recievedFriendRequest = recievedFriendRequest;
+		this.receivedFriendRequest = receivedFriendRequest;
 		this.friend = friend;
 		this.likes = likes;
 		this.comments = comments;

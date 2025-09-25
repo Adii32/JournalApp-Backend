@@ -176,6 +176,7 @@ if(list != null) {
 }
 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
+
 @GetMapping("/favorites")
 public ResponseEntity<List<JournalEntry>> getAllFavoriteJournal(){
 	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
