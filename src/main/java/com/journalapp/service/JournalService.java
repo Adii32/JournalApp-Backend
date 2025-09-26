@@ -22,6 +22,7 @@ import com.journalapp.entity.JournalEntry;
 import com.journalapp.entity.User;
 import com.journalapp.exception.ResourceNotFound;
 import com.journalapp.repo.JournalRepo;
+import com.journalapp.service.SentimentService.SentimentResponse;
 
 import jakarta.transaction.Transactional;
 
@@ -37,7 +38,8 @@ public class JournalService {
 	private UserService userService;
 @Autowired
 private ImageUploadService imageService;
-
+@Autowired
+private SentimentService sentimentService;
 	public JournalService(JournalRepo journalRepo) {
 		this.journalRepo = journalRepo;
 	}
@@ -45,6 +47,9 @@ public JournalEntry createJournal(JournalEntry entry,MultipartFile imageFile) th
 	ImgInfo imgInfo = imageService.upload(imageFile);
  entry.setImg(imgInfo.secure_url());
  entry.setCloudinaryPublicId(imgInfo.public_id());
+SentimentResponse sentiment = sentimentService.analyzeSentiment(entry.getContent()).block();
+entry.setSentimentLabel(sentiment.getLabel());
+entry.setSentimentScore(sentiment.getScore());
 	return journalRepo.save(entry);
 }
 

@@ -31,6 +31,8 @@ private LocalDateTime date;
 private String img;
 private String cloudinaryPublicId;
 private boolean favorite;
+private String sentimentLabel;
+private double sentimentScore;
 @OneToMany(mappedBy="journalEntry")
 @JsonIgnore
 private List<LikeFeature> likes;
@@ -51,8 +53,7 @@ public String getCloudinaryPublicId() {
 public void setCloudinaryPublicId(String cloudinaryPublicId) {
 	this.cloudinaryPublicId = cloudinaryPublicId;
 }
-@Enumerated(EnumType.STRING)
-private Sentiments sentiments;
+
 
 public boolean isFavorite() {
 	return favorite;
@@ -70,12 +71,7 @@ public void setCategory(Category category) {
 @JsonIgnore
 @JoinColumn(name="user_id")
 private User user;
-public Sentiments getSentiments() {
-	return sentiments;
-}
-public void setSentiments(Sentiments sentiments) {
-	this.sentiments = sentiments;
-}
+
 public Long getId() {
 	return id;
 }
@@ -120,9 +116,10 @@ public List<CommentFeature> getComments() {
 public void setComments(List<CommentFeature> comments) {
 	this.comments = comments;
 }
+
 public JournalEntry(Long id, String title, String content, LocalDateTime date, String img, String cloudinaryPublicId,
-		boolean favorite, List<LikeFeature> likes, List<CommentFeature> comments, Category category,
-		Sentiments sentiments, User user) {
+		boolean favorite, String sentimentLabel, double sentimentScore, List<LikeFeature> likes,
+		List<CommentFeature> comments, Category category, User user) {
 	super();
 	this.id = id;
 	this.title = title;
@@ -131,11 +128,25 @@ public JournalEntry(Long id, String title, String content, LocalDateTime date, S
 	this.img = img;
 	this.cloudinaryPublicId = cloudinaryPublicId;
 	this.favorite = favorite;
+	this.sentimentLabel = sentimentLabel;
+	this.sentimentScore = sentimentScore;
 	this.likes = likes;
 	this.comments = comments;
 	this.category = category;
-	this.sentiments = sentiments;
+
 	this.user = user;
+}
+public String getSentimentLabel() {
+	return sentimentLabel;
+}
+public void setSentimentLabel(String sentimentLabel) {
+	this.sentimentLabel = sentimentLabel;
+}
+public double getSentimentScore() {
+	return sentimentScore;
+}
+public void setSentimentScore(double d) {
+	this.sentimentScore = d;
 }
 public JournalEntry() {
 	super();

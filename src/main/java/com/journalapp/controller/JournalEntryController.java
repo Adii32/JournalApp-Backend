@@ -35,6 +35,7 @@ import com.journalapp.repo.JournalRepo;
 import com.journalapp.repo.JournalRepoImpl;
 import com.journalapp.service.EmailService;
 import com.journalapp.service.JournalService;
+import com.journalapp.service.SentimentService;
 import com.journalapp.service.UserService;
 
 import aj.org.objectweb.asm.commons.TryCatchBlockSorter;
@@ -56,6 +57,8 @@ private JournalRepoImpl journalRepoImpl;
 	}
 	@Autowired
 	private JournalRepo journalRepo;
+	@Autowired
+	private SentimentService sentimentService;
 
 @Autowired
 private UserService userService;
